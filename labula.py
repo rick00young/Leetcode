@@ -370,6 +370,11 @@ class Solution(object):
         return dp(0, 0)
 
     def longesCommonSubsequence(self, s1, s2) -> int:
+        """
+        dp[i][j] 的含义是：对于 s1[1..i] 和 s2[1..j] 它们的 LCS 长度是 dp[i][j] 。
+        让索引为 0 的⾏和列表⽰空串， dp[0][..] 和 dp[..][0] 都应该
+        初始化为 0，这就是 base case
+        """
         m, n = len(s1), len(s2)
         # 构建 DP table 和 base case
         dp = [[0] * (n+1) for _ in range(m+1)]
@@ -503,7 +508,7 @@ class Solution(object):
             if c1 in needs:
                 window[c1] = window.get(c1, 0)+1
                 if window[c1] == needs[c1]:
-                    match +=1
+                    match += 1
             right += 1
             while match == len(needs):
                 if right - left < minLen:
@@ -546,7 +551,8 @@ class Solution(object):
                         match -= 1
                 left +=1
 
-        return ''  if minLen == int('int') else  s[start, start+minLen]
+        # return ''  if minLen == int('int') else  s[start, start+minLen]
+        return res
 
     def lengthOfLongestSubstring(self, s):
         left = 0
@@ -562,7 +568,7 @@ class Solution(object):
             while window.get(c1, 0) > 1:
                 c2 = s[left]
                 window[c2] = window.get(c2, 0)-1
-                left -= 1
+                left += 1
             res = max(res, right-left)
         return res
 
@@ -865,6 +871,7 @@ class Solution(object):
         while i < len(s) and j < len(t):
             if s[i] == t[j]:
                 j+=1
+            i += 1
         return i == len(s)
 
     def countPrimes(self, n):
@@ -1050,7 +1057,12 @@ class MergeSort(object):
         self.sort2(array, 0, len(array)-1)
 
     def sort2(self, array, lo, hi):
-        pass
+        if lo >= hi:
+            return
+        mid = lo + (hi-lo)//2
+        self.sort2(array, lo, mid)
+        self.sort2(array, mid+1, hi)
+        self.merge(array, lo, mid, hi)
 
 
     def merge(self, array, lo, mid, hi):
